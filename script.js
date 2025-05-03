@@ -1,14 +1,11 @@
-// script.js
-
 const bandNameBox = document.getElementById("bandName");
 const savedNamesList = document.getElementById("savedNames");
-const container = document.getElementById("generatorContainer");
+const darkModeToggle = document.getElementById("darkModeToggle");
 
 const adjectives = ["Electric", "Neon", "Fuzzy", "Lunar", "Burning", "Silent", "Heavy", "Crimson", "Violet", "Shattered"];
 const nouns = ["Tigers", "Echoes", "Storm", "Monks", "Voltage", "Screams", "Nomads", "Mirage", "Jackals", "Horizons"];
-
-const fonts = ["Orbitron", "Rubik", "Arial", "Courier New", "Georgia", "Verdana"];
-const colors = ["#00ffee", "#ff4fa3", "#ffee00", "#88ffcc", "#ffaa00", "#ffffff"];
+const fonts = ["Orbitron", "Rubik", "Poppins", "Arial", "Comic Sans MS"];
+const colors = ["#ff6347", "#00ff00", "#1e90ff", "#ff1493", "#ff4500"];
 
 function getRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -16,29 +13,27 @@ function getRandom(arr) {
 
 function generateName() {
   const name = `${getRandom(adjectives)} ${getRandom(nouns)}`;
-  const font = getRandom(fonts);
-  const size = `${Math.floor(Math.random() * 20 + 24)}px`;
-  const color = getRandom(colors);
-
   bandNameBox.textContent = name;
-  bandNameBox.style.fontFamily = font;
-  bandNameBox.style.fontSize = size;
-  bandNameBox.style.color = color;
-  bandNameBox.style.textShadow = `0 0 10px ${color}`;
-
-  renderSavedNames(name, font, size, color);
+  
+  // Random font size and style
+  bandNameBox.style.fontFamily = getRandom(fonts);
+  bandNameBox.style.fontSize = `${Math.floor(Math.random() * 40) + 20}px`; // Random size between 20px and 60px
+  
+  // Random color
+  bandNameBox.style.color = getRandom(colors);
 }
 
 function copyName() {
   const name = bandNameBox.textContent;
-  if (!name || name === "Click Generate!") return;
-  navigator.clipboard.writeText(name).then(() => {
-    alert("Band name copied to clipboard!");
-  });
+  if (name !== "Click Generate!") {
+    navigator.clipboard.writeText(name).then(() => {
+      alert("Band name copied to clipboard!");
+    });
+  }
 }
 
 function downloadGeneratorImage() {
-  html2canvas(container).then(canvas => {
+  html2canvas(document.getElementById("generatorContainer")).then(function(canvas) {
     const link = document.createElement("a");
     link.download = "band_name_generator.png";
     link.href = canvas.toDataURL();
@@ -46,24 +41,35 @@ function downloadGeneratorImage() {
   });
 }
 
-function renderSavedNames(name, font, size, color) {
-  const maxNames = 10;
-  const li = document.createElement("li");
-  li.textContent = name;
-  li.style.fontFamily = font;
-  li.style.fontSize = size;
-  li.style.color = color;
-  li.style.textShadow = `0 0 6px ${color}`;
+function toggleDarkMode() {
+  const isDarkMode = darkModeToggle.checked;
+  document.body.classList.toggle("dark-mode", isDarkMode);
+  document.querySelector(".container").classList.toggle("dark-mode", isDarkMode);
+  localStorage.setItem("darkMode", isDarkMode);
+}
 
-  savedNamesList.prepend(li);
+function loadDarkModePreference() {
+  const isDarkMode = JSON.parse(localStorage.getItem("darkMode"));
+  darkModeToggle.checked = isDarkMode;
+  document.body.classList.toggle("dark-mode", isDarkMode);
+  document.querySelector(".container").classList.toggle("dark-mode", isDarkMode);
+}
 
-  while (savedNamesList.children.length > maxNames) {
-    savedNamesList.removeChild(savedNamesList.lastChild);
+function shareOnTwitter() {
+  const bandName = bandNameBox.textContent;
+  if (bandName !== "Click Generate!") {
+    const url = `https://twitter.com/intent/tweet?text=Check%20out%20my%20band%20name:%20${encodeURIComponent(bandName)}`;
+    window.open(url, "_blank");
   }
 }
 
-// Initial styling for placeholder
-bandNameBox.style.fontFamily = getRandom(fonts);
-bandNameBox.style.fontSize = "32px";
-bandNameBox.style.color = getRandom(colors);
-bandNameBox.style.textShadow = `0 0 10px ${bandNameBox.style.color}`;
+function shareOnMastodon() {
+  const bandName = bandNameBox.textContent;
+  if (bandName !== "Click Generate!") {
+    const url = `https://mastodon.social/share?text=Check%20out%20my%20band%20name:%20${encodeURIComponent(bandName)}`;
+    window.open(url, "_blank");
+  }
+}
+
+// Load dark mode setting on page load
+window.onload = loadDarkModePreference;
