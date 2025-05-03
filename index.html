@@ -2,24 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Band Name Generator</title>
   <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik&display=swap&family=Permanent+Marker&family=Press+Start+2P&family=Anton&family=Bebas+Neue&family=Monoton&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rubik&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="container" id="generatorContainer">
-    <h1 class="title" id="pageTitle">🎸 Band Name Generator 🎤</h1>
+    <h1 class="title" id="mainTitle">🎸 Band Name Generator 🎤</h1>
     <div class="name-box" id="bandName">Click Generate!</div>
     <div class="buttons">
       <button onclick="generateName()">🎲 Generate</button>
       <button onclick="copyName()">📋 Copy</button>
       <button onclick="downloadGeneratorImage()">💾 Save Image</button>
     </div>
-    <h2 id="savedTitle">Saved Names</h2>
-    <ul id="savedNames"></ul>
+    <h2 id="savedLabel">Saved Names</h2>
+    <ul id="savedNames">
+      <!-- Empty slots -->
+      <li class="placeholder"></li>
+      <li class="placeholder"></li>
+      <li class="placeholder"></li>
+      <li class="placeholder"></li>
+      <li class="placeholder"></li>
+      <li class="placeholder"></li>
+    </ul>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
