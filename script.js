@@ -1,98 +1,66 @@
+const bandNameEl = document.getElementById("bandName");
+const savedList = document.getElementById("savedNames");
+const container = document.getElementById("generatorContainer");
+const mainTitle = document.getElementById("mainTitle");
+const savedLabel = document.getElementById("savedLabel");
+
+const names = [
+  "Solar Lungs", "Echo Mirage", "Velvet Engine", "Rust Phantom",
+  "Moon Voltage", "Neon Ritual", "Grave Disco", "Crimson Circuit",
+  "Dream Thief", "Shadow Pulse", "Quantum Grime", "Plastic Messiah"
+];
+
 const fonts = [
   "'Orbitron', sans-serif",
   "'Rubik', sans-serif",
-  "'Permanent Marker', cursive",
-  "'Press Start 2P', cursive",
-  "'Anton', sans-serif",
-  "'Bebas Neue', sans-serif",
-  "'Monoton', cursive"
+  "'Courier New', monospace",
+  "Impact, sans-serif",
+  "'Lucida Console', monospace"
 ];
 
-const names = [
-  "Electric Lobster",
-  "Velvet Avalanche",
-  "Neon Sphinx",
-  "Crimson Echo",
-  "Quantum Banjo",
-  "Static Prism",
-  "Feral Eclipse",
-  "Glass Panther",
-  "Turbo Halo",
-  "Siren Spiral",
-  "Grunge Oracle",
-  "Cyborg Dove"
+const colors = [
+  "#ff0055", "#0099ff", "#ff9900", "#66ff66", "#cc00cc", "#4444ff"
 ];
 
-const savedList = document.getElementById("savedNames");
-const bandNameBox = document.getElementById("bandName");
-const pageTitle = document.getElementById("pageTitle");
-const savedTitle = document.getElementById("savedTitle");
-const generatorContainer = document.getElementById("generatorContainer");
-
-let savedCount = 0;
-const MAX_SAVED = 6;
-
-// Pre-fill saved slots
-window.onload = () => {
-  for (let i = 0; i < MAX_SAVED; i++) {
-    const placeholder = document.createElement("li");
-    placeholder.innerHTML = "&nbsp;";
-    savedList.appendChild(placeholder);
-  }
-};
-
-function getRandomFrom(arr) {
+function getRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function getRandomColor() {
-  const r = Math.floor(Math.random() * 180 + 50);
-  const g = Math.floor(Math.random() * 180 + 50);
-  const b = Math.floor(Math.random() * 180 + 50);
-  return `rgb(${r},${g},${b})`;
-}
-
 function generateName() {
-  const name = getRandomFrom(names);
-  const font = getRandomFrom(fonts);
-  const size = `${Math.floor(Math.random() * 14) + 26}px`;
-  const color = getRandomColor();
+  const name = getRandom(names);
+  const font = getRandom(fonts);
+  const color = getRandom(colors);
+  const size = Math.floor(Math.random() * 20) + 24;
 
-  // Apply styles to band name box
-  bandNameBox.textContent = name;
-  bandNameBox.style.fontFamily = font;
-  bandNameBox.style.fontSize = size;
-  bandNameBox.style.color = color;
+  bandNameEl.textContent = name;
+  bandNameEl.style.fontFamily = font;
+  bandNameEl.style.color = color;
+  bandNameEl.style.fontSize = size + "px";
 
-  // Change page theme to match band name style
-  pageTitle.style.color = color;
-  savedTitle.style.color = color;
-  generatorContainer.style.borderColor = color;
+  // Apply to page elements (not saved names)
+  container.style.borderColor = color;
+  mainTitle.style.color = color;
+  savedLabel.style.color = color;
 
-  // Save name as styled copy
-  const li = document.createElement("li");
-  li.textContent = name;
-  li.style.fontFamily = font;
-  li.style.fontSize = size;
-  li.style.color = color;
+  // Save formatted name as-is
+  const clone = bandNameEl.cloneNode(true);
+  clone.style.margin = "0.5rem 0";
 
-  // Replace oldest entry if at max
-  if (savedList.children.length >= MAX_SAVED) {
-    savedList.removeChild(savedList.children[0]);
+  // Remove oldest if already 6
+  if (savedList.children.length >= 6) {
+    savedList.removeChild(savedList.firstElementChild);
   }
 
-  savedList.appendChild(li);
+  savedList.appendChild(clone);
 }
 
 function copyName() {
-  const name = bandNameBox.textContent;
-  navigator.clipboard.writeText(name).then(() => {
-    alert("Band name copied!");
-  });
+  navigator.clipboard.writeText(bandNameEl.textContent)
+    .then(() => alert("Band name copied to clipboard!"));
 }
 
 function downloadGeneratorImage() {
-  html2canvas(document.getElementById("generatorContainer")).then(canvas => {
+  html2canvas(container).then(canvas => {
     const link = document.createElement("a");
     link.download = "band-name.png";
     link.href = canvas.toDataURL();
