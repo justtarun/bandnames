@@ -1,13 +1,14 @@
-/* styles.css */
+/* Global Styles */
 body {
   margin: 0;
   font-family: 'Rubik', sans-serif;
-  background: radial-gradient(ellipse at center, #0f0f0f 0%, #000000 100%);
+  background: #111;
   color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 .container {
@@ -18,6 +19,7 @@ body {
   border: 2px solid #00ffee;
   border-radius: 16px;
   box-shadow: 0 0 25px #00ffee88;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 .title {
@@ -29,7 +31,7 @@ body {
 }
 
 .name-box {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #fff;
   background-color: #222;
@@ -39,17 +41,22 @@ body {
   margin: 1.5rem auto;
   box-shadow: 0 0 20px #00ffee55;
   transition: all 0.3s ease;
+  animation: glitch 2s infinite;
 }
 
-.buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 2rem;
+@keyframes glitch {
+  0% {
+    text-shadow: 2px 2px #00ffee, -2px -2px #ff00ee;
+  }
+  50% {
+    text-shadow: 2px 2px #ff00ee, -2px -2px #00ffee;
+  }
+  100% {
+    text-shadow: 2px 2px #00ffee, -2px -2px #ff00ee;
+  }
 }
 
-button {
+.buttons button, .social-share button {
   padding: 0.7rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
@@ -60,6 +67,7 @@ button {
   cursor: pointer;
   box-shadow: 0 0 10px #00ffeeaa;
   transition: transform 0.2s, background 0.3s;
+  margin: 0.5rem;
 }
 
 button:hover {
@@ -67,22 +75,40 @@ button:hover {
   transform: scale(1.05);
 }
 
-h2 {
+.mode-toggle {
+  margin-top: 1rem;
+  font-size: 1rem;
   color: #00ffee;
-  font-family: 'Orbitron', sans-serif;
-  margin-bottom: 0.5rem;
 }
 
-#savedNames {
-  list-style: none;
-  padding: 0;
-  color: #fff;
+button:focus {
+  outline: none;
 }
 
-#savedNames li {
-  margin: 0.4rem 0;
-  background: #111;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #00ffee55;
+/* Dark Mode */
+body.dark-mode {
+  background: #000;
+  color: #f0f0f0;
+}
+
+.container.dark-mode {
+  background: rgba(10, 10, 10, 0.9);
+  border: 2px solid #00ffee;
+  box-shadow: 0 0 25px #00ffee88;
+}
+
+/* Buttons Styling */
+.social-share {
+  margin-top: 1rem;
+}
+
+.social-share button {
+  background: #1da1f2;
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.social-share button:hover {
+  background: #1b91d6;
 }
