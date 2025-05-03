@@ -90,3 +90,9 @@ button:focus {
 #savedNames li:nth-child(even) {
   background-color: #555;
 }
+
+.empty-entry {
+  height: 2rem;
+  background-color: #666;
+  margin: 0.5rem 0;
+}
