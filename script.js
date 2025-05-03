@@ -1,6 +1,5 @@
 const bandNameBox = document.getElementById("bandName");
 const savedNamesList = document.getElementById("savedNames");
-const darkModeToggle = document.getElementById("darkModeToggle");
 
 const adjectives = ["Electric", "Neon", "Fuzzy", "Lunar", "Burning", "Silent", "Heavy", "Crimson", "Violet", "Shattered"];
 const nouns = ["Tigers", "Echoes", "Storm", "Monks", "Voltage", "Screams", "Nomads", "Mirage", "Jackals", "Horizons"];
@@ -14,13 +13,13 @@ function getRandom(arr) {
 function generateName() {
   const name = `${getRandom(adjectives)} ${getRandom(nouns)}`;
   bandNameBox.textContent = name;
-  
-  // Random font size and style
-  bandNameBox.style.fontFamily = getRandom(fonts);
-  bandNameBox.style.fontSize = `${Math.floor(Math.random() * 40) + 20}px`; // Random size between 20px and 60px
-  
-  // Random color
-  bandNameBox.style.color = getRandom(colors);
+
+  // Random color for the band name
+  const nameColor = getRandom(colors);
+  bandNameBox.style.color = nameColor;
+
+  // Apply the same random color to the container
+  document.querySelector(".container").style.color = nameColor;
 
   saveName(name);
 }
@@ -61,23 +60,7 @@ function displaySavedNames() {
   savedNamesList.innerHTML = savedNames.map(name => `<li>${name}</li>`).join('');
 }
 
-function toggleDarkMode() {
-  const isDarkMode = darkModeToggle.checked;
-  document.body.classList.toggle("dark-mode", isDarkMode);
-  document.querySelector(".container").classList.toggle("dark-mode", isDarkMode);
-  localStorage.setItem("darkMode", isDarkMode);
-}
-
-function loadDarkModePreference() {
-  const isDarkMode = JSON.parse(localStorage.getItem("darkMode"));
-  darkModeToggle.checked = isDarkMode;
-  document.body.classList.toggle("dark-mode", isDarkMode);
-  document.querySelector(".container").classList.toggle("dark-mode", isDarkMode);
-}
-
-// Load saved names and dark mode preference on page load
+// Load saved names on page load
 window.onload = () => {
-  loadDarkModePreference();
   displaySavedNames();
 };
-
