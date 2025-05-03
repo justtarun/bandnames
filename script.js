@@ -1,10 +1,10 @@
 const bandNameBox = document.getElementById("bandName");
 const savedNamesList = document.getElementById("savedNames");
 
-const adjectives = ["Electric", "Neon", "Fuzzy", "Lunar", "Burning", "Silent", "Heavy", "Crimson", "Violet", "Shattered"];
-const nouns = ["Tigers", "Echoes", "Storm", "Monks", "Voltage", "Screams", "Nomads", "Mirage", "Jackals", "Horizons"];
+const adjectives = ["Electric", "Neon", "Fuzzy", "Lunar", "Burning", "Silent", "Heavy", "Crimson", "Violet", "Shattered", "Blazing", "Thunderous", "Starry", "Shiny"];
+const nouns = ["Tigers", "Echoes", "Storm", "Monks", "Voltage", "Screams", "Nomads", "Mirage", "Jackals", "Horizons", "Riders", "Wolves", "Phoenix", "Blizzards"];
 const fonts = ["Orbitron", "Rubik", "Poppins", "Arial", "Comic Sans MS"];
-const colors = ["#ff6347", "#00ff00", "#1e90ff", "#ff1493", "#ff4500"];
+const colors = ["#ff6347", "#00ff00", "#1e90ff", "#ff1493", "#ff4500", "#ffff00", "#800080", "#00ffff"];
 
 function getRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -20,6 +20,14 @@ function generateName() {
 
   // Apply the same random color to the container
   document.querySelector(".container").style.color = nameColor;
+
+  // Apply the same random font to the band name
+  const randomFont = getRandom(fonts);
+  bandNameBox.style.fontFamily = randomFont;
+
+  // Apply a random font size (from 1.5rem to 3rem)
+  const randomSize = `${Math.floor(Math.random() * 1.5) + 1.5}rem`;
+  bandNameBox.style.fontSize = randomSize;
 
   saveName(name);
 }
@@ -57,7 +65,7 @@ function saveName(name) {
 
 function displaySavedNames() {
   let savedNames = JSON.parse(localStorage.getItem("savedNames")) || [];
-  savedNamesList.innerHTML = savedNames.map(name => `<li>${name}</li>`).join('');
+  savedNamesList.innerHTML = savedNames.map(name => `<li style="color: ${bandNameBox.style.color}; font-family: ${bandNameBox.style.fontFamily}; font-size: ${bandNameBox.style.fontSize};">${name}</li>`).join('');
 }
 
 // Load saved names on page load
