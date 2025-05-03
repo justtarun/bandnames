@@ -24,7 +24,7 @@ body {
 
 .title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
+  font-size: 2.5rem; /* One size bigger */
   margin-bottom: 1.5rem;
   color: #00ffee;
   text-shadow: 0 0 10px #00ffeeaa;
@@ -41,22 +41,9 @@ body {
   margin: 1.5rem auto;
   box-shadow: 0 0 20px #00ffee55;
   transition: all 0.3s ease;
-  animation: glitch 2s infinite;
 }
 
-@keyframes glitch {
-  0% {
-    text-shadow: 2px 2px #00ffee, -2px -2px #ff00ee;
-  }
-  50% {
-    text-shadow: 2px 2px #ff00ee, -2px -2px #00ffee;
-  }
-  100% {
-    text-shadow: 2px 2px #00ffee, -2px -2px #ff00ee;
-  }
-}
-
-.buttons button, .social-share button {
+.buttons button {
   padding: 0.7rem 1.2rem;
   font-size: 1rem;
   font-weight: bold;
@@ -75,49 +62,13 @@ button:hover {
   transform: scale(1.05);
 }
 
-.mode-toggle {
-  margin-top: 1rem;
-  font-size: 1rem;
-  color: #00ffee;
-}
-
 button:focus {
   outline: none;
-}
-
-/* Dark Mode */
-body.dark-mode {
-  background: #000;
-  color: #f0f0f0;
-}
-
-.container.dark-mode {
-  background: rgba(10, 10, 10, 0.9);
-  border: 2px solid #00ffee;
-  box-shadow: 0 0 25px #00ffee88;
-}
-
-/* Buttons Styling */
-.social-share {
-  margin-top: 1rem;
-}
-
-.social-share button {
-  background: #1da1f2;
-  color: white;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-.social-share button:hover {
-  background: #1b91d6;
 }
 
 /* Saved Names Section */
 #savedNames {
   margin-top: 1rem;
-  max-height: 250px; /* Adjusted height to prevent scrolling */
-  overflow-y: auto; /* Allow scrolling if needed */
   padding: 0.5rem;
   background-color: #333;
   border-radius: 8px;
@@ -129,6 +80,7 @@ body.dark-mode {
 #savedNames li {
   font-size: 1.2rem;
   margin: 0.5rem 0;
+  color: inherit; /* Keep the same color for each list item */
 }
 
 #savedNames li:nth-child(odd) {
