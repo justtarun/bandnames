@@ -21,6 +21,8 @@ function generateName() {
   
   // Random color
   bandNameBox.style.color = getRandom(colors);
+
+  saveName(name);
 }
 
 function copyName() {
@@ -41,6 +43,24 @@ function downloadGeneratorImage() {
   });
 }
 
+function saveName(name) {
+  // Store saved names in an array (limit to 6 entries)
+  let savedNames = JSON.parse(localStorage.getItem("savedNames")) || [];
+  if (savedNames.length >= 6) {
+    savedNames.shift(); // Remove the oldest name if the limit is reached
+  }
+  savedNames.push(name);
+
+  // Update the local storage and the UI
+  localStorage.setItem("savedNames", JSON.stringify(savedNames));
+  displaySavedNames();
+}
+
+function displaySavedNames() {
+  let savedNames = JSON.parse(localStorage.getItem("savedNames")) || [];
+  savedNamesList.innerHTML = savedNames.map(name => `<li>${name}</li>`).join('');
+}
+
 function toggleDarkMode() {
   const isDarkMode = darkModeToggle.checked;
   document.body.classList.toggle("dark-mode", isDarkMode);
@@ -55,21 +75,9 @@ function loadDarkModePreference() {
   document.querySelector(".container").classList.toggle("dark-mode", isDarkMode);
 }
 
-function shareOnTwitter() {
-  const bandName = bandNameBox.textContent;
-  if (bandName !== "Click Generate!") {
-    const url = `https://twitter.com/intent/tweet?text=Check%20out%20my%20band%20name:%20${encodeURIComponent(bandName)}`;
-    window.open(url, "_blank");
-  }
-}
+// Load saved names and dark mode preference on page load
+window.onload = () => {
+  loadDarkModePreference();
+  displaySavedNames();
+};
 
-function shareOnMastodon() {
-  const bandName = bandNameBox.textContent;
-  if (bandName !== "Click Generate!") {
-    const url = `https://mastodon.social/share?text=Check%20out%20my%20band%20name:%20${encodeURIComponent(bandName)}`;
-    window.open(url, "_blank");
-  }
-}
-
-// Load dark mode setting on page load
-window.onload = loadDarkModePreference;
