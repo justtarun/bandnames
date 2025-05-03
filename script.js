@@ -1,74 +1,101 @@
+const fonts = [
+  "'Orbitron', sans-serif",
+  "'Rubik', sans-serif",
+  "'Permanent Marker', cursive",
+  "'Press Start 2P', cursive",
+  "'Anton', sans-serif",
+  "'Bebas Neue', sans-serif",
+  "'Monoton', cursive"
+];
+
+const names = [
+  "Electric Lobster",
+  "Velvet Avalanche",
+  "Neon Sphinx",
+  "Crimson Echo",
+  "Quantum Banjo",
+  "Static Prism",
+  "Feral Eclipse",
+  "Glass Panther",
+  "Turbo Halo",
+  "Siren Spiral",
+  "Grunge Oracle",
+  "Cyborg Dove"
+];
+
+const savedList = document.getElementById("savedNames");
 const bandNameBox = document.getElementById("bandName");
-const savedNamesList = document.getElementById("savedNames");
+const pageTitle = document.getElementById("pageTitle");
+const savedTitle = document.getElementById("savedTitle");
+const generatorContainer = document.getElementById("generatorContainer");
 
-const adjectives = ["Electric", "Neon", "Fuzzy", "Lunar", "Burning", "Silent", "Heavy", "Crimson", "Violet", "Shattered", "Blazing", "Thunderous", "Starry", "Shiny"];
-const nouns = ["Tigers", "Echoes", "Storm", "Monks", "Voltage", "Screams", "Nomads", "Mirage", "Jackals", "Horizons", "Riders", "Wolves", "Phoenix", "Blizzards"];
-const fonts = ["Orbitron", "Rubik", "Poppins", "Arial", "Comic Sans MS"];
-const colors = ["#ff6347", "#00ff00", "#1e90ff", "#ff1493", "#ff4500", "#ffff00", "#800080", "#00ffff"];
+let savedCount = 0;
+const MAX_SAVED = 6;
 
-function getRandom(arr) {
+// Pre-fill saved slots
+window.onload = () => {
+  for (let i = 0; i < MAX_SAVED; i++) {
+    const placeholder = document.createElement("li");
+    placeholder.innerHTML = "&nbsp;";
+    savedList.appendChild(placeholder);
+  }
+};
+
+function getRandomFrom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function getRandomColor() {
+  const r = Math.floor(Math.random() * 180 + 50);
+  const g = Math.floor(Math.random() * 180 + 50);
+  const b = Math.floor(Math.random() * 180 + 50);
+  return `rgb(${r},${g},${b})`;
+}
+
 function generateName() {
-  const name = `${getRandom(adjectives)} ${getRandom(nouns)}`;
+  const name = getRandomFrom(names);
+  const font = getRandomFrom(fonts);
+  const size = `${Math.floor(Math.random() * 14) + 26}px`;
+  const color = getRandomColor();
+
+  // Apply styles to band name box
   bandNameBox.textContent = name;
+  bandNameBox.style.fontFamily = font;
+  bandNameBox.style.fontSize = size;
+  bandNameBox.style.color = color;
 
-  // Random color for the band name
-  const nameColor = getRandom(colors);
-  bandNameBox.style.color = nameColor;
+  // Change page theme to match band name style
+  pageTitle.style.color = color;
+  savedTitle.style.color = color;
+  generatorContainer.style.borderColor = color;
 
-  // Apply the same random color to the container
-  document.querySelector(".container").style.color = nameColor;
+  // Save name as styled copy
+  const li = document.createElement("li");
+  li.textContent = name;
+  li.style.fontFamily = font;
+  li.style.fontSize = size;
+  li.style.color = color;
 
-  // Apply the same random font to the band name
-  const randomFont = getRandom(fonts);
-  bandNameBox.style.fontFamily = randomFont;
+  // Replace oldest entry if at max
+  if (savedList.children.length >= MAX_SAVED) {
+    savedList.removeChild(savedList.children[0]);
+  }
 
-  // Apply a random font size (from 1.5rem to 3rem)
-  const randomSize = `${Math.floor(Math.random() * 1.5) + 1.5}rem`;
-  bandNameBox.style.fontSize = randomSize;
-
-  saveName(name);
+  savedList.appendChild(li);
 }
 
 function copyName() {
   const name = bandNameBox.textContent;
-  if (name !== "Click Generate!") {
-    navigator.clipboard.writeText(name).then(() => {
-      alert("Band name copied to clipboard!");
-    });
-  }
+  navigator.clipboard.writeText(name).then(() => {
+    alert("Band name copied!");
+  });
 }
 
 function downloadGeneratorImage() {
-  html2canvas(document.getElementById("generatorContainer")).then(function(canvas) {
+  html2canvas(document.getElementById("generatorContainer")).then(canvas => {
     const link = document.createElement("a");
-    link.download = "band_name_generator.png";
+    link.download = "band-name.png";
     link.href = canvas.toDataURL();
     link.click();
   });
 }
-
-function saveName(name) {
-  // Store saved names in an array (limit to 6 entries)
-  let savedNames = JSON.parse(localStorage.getItem("savedNames")) || [];
-  if (savedNames.length >= 6) {
-    savedNames.shift(); // Remove the oldest name if the limit is reached
-  }
-  savedNames.push(name);
-
-  // Update the local storage and the UI
-  localStorage.setItem("savedNames", JSON.stringify(savedNames));
-  displaySavedNames();
-}
-
-function displaySavedNames() {
-  let savedNames = JSON.parse(localStorage.getItem("savedNames")) || [];
-  savedNamesList.innerHTML = savedNames.map(name => `<li style="color: ${bandNameBox.style.color}; font-family: ${bandNameBox.style.fontFamily}; font-size: ${bandNameBox.style.fontSize};">${name}</li>`).join('');
-}
-
-// Load saved names on page load
-window.onload = () => {
-  displaySavedNames();
-};
